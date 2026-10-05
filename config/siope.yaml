@@ -1,0 +1,41 @@
+# SIOPE - serviço OData de dados abertos do FNDE.
+# Recursos, colunas e códigos verificados em 29/09/2026 (ver docs/fontes.md).
+
+url_base: https://www.fnde.gov.br/olinda-ide/servico/DADOS_ABERTOS_SIOPE/versao/v1/odata
+periodo: 6              # 6º bimestre = ano fechado
+ano_minimo: 2017        # 2015 e 2016 retornam lista vazia no serviço OData
+
+# Recursos coletados. "select" limita as colunas (Dados Gerais tem uma variante com dados do
+# responsável pela declaração, que NÃO é usada). Remuneracao_Siope traz o nome de cada profissional
+# (dado pessoal) e NÃO é coletado.
+recursos:
+  indicadores: {nome: Indicadores_Siope}
+  receita: {nome: Receita_Siope}
+  despesa_funcao: {nome: Despesas_Funcao_Educacao_Siope}
+  dados_gerais:
+    nome: Dados_Gerais_Siope
+    select: "TIPO,NUM_ANO,NUM_PERI,COD_UF,SIG_UF,COD_MUNI,NOM_MUNI,NUM_POPU,DAT_DECL,VAL_RECE_REAL,VAL_DESP_LIQU,VL_DESP_EMPE_EDU,VL_DESP_LIQU_EDU,VL_DESP_PAGA_EDU,VL_DESP_ORCA_EDU"
+
+# Indicadores do SIOPE usados (COD_INDI, municípios).
+indicadores:
+  mde_percentual: 24       # 1.1 - % da receita de impostos aplicada em MDE (F1)
+  investimento_por_aluno: 56   # 4.8 - investimento educacional por aluno da educação básica (F2.siope)
+
+# F4 - receitas do Fundeb (COD_EXIB_FORMATADO do recurso Receita_Siope), coluna "Receitas Realizadas".
+# O plano de contas mudou em 2021 (novo Fundeb, Lei 14.113/2020) e de novo em 2023. Só entram os anos
+# com códigos verificados; nos demais (ex.: ano novo ainda não conferido) o F4 fica "sem_dado" até
+# alguém conferir os códigos e acrescentar aqui (docs/pendencias.md).
+# ATENÇÃO: em 2021-2022 a mesma receita aparece em três níveis (17180900, 17180910, 17180911 com o
+# mesmo valor). Somar todos triplicaria o valor: só o código de nível mais alto entra.
+fundeb:
+  coluna: Receitas Realizadas
+  por_periodo:
+    - anos: [2017, 2020]
+      codigos: ["4,17,24,01,00,00", "4,17,24,02,00,00"]
+      nota: "4,17,24,01,00,00 = Transferências de Recursos do FUNDEB; 4,17,24,02,00,00 = Complementação da União (verificado 2017-2020)."
+    - anos: [2021, 2022]
+      codigos: ["17580100", "17180900"]
+      nota: "17580100 = Transferências de Recursos do Fundeb; 17180900 = Complementação da União (verificado 2021 e 2022)."
+    - anos: [2023, 2024]
+      codigos: ["17510000", "17150000"]
+      nota: "17510000 = Transferências de Recursos do Fundeb; 17150000 = Complementação da União ao Fundeb."

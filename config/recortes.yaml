@@ -1,0 +1,108 @@
+# Rótulos dos valores usados nos recortes (core.dim_recorte).
+# O código do recorte é montado assim: "rede:<v>|localizacao:<v>|<tipo>:<v>" (partes vazias omitidas);
+# sem nenhuma parte, o código é "total".
+eixos:
+  rede:
+    rotulo: Rede
+    valores:
+      federal: Federal
+      estadual: Estadual
+      municipal: Municipal
+      privada: Privada
+      publica: Pública
+  localizacao:
+    rotulo: Localização
+    valores:
+      urbana: Urbana
+      rural: Rural
+  sexo:
+    rotulo: Sexo
+    valores:
+      feminino: Feminino
+      masculino: Masculino
+  raca_cor:
+    rotulo: Cor/raça
+    valores:
+      branca: Branca
+      preta: Preta
+      parda: Parda
+      amarela: Amarela
+      indigena: Indígena
+      nao_declarada: Não declarada
+  faixa_etaria:
+    rotulo: Faixa etária
+    valores:
+      "0_3": 0 a 3 anos
+      "4_5": 4 a 5 anos
+      "6_10": 6 a 10 anos
+      "11_14": 11 a 14 anos
+      "6_14": 6 a 14 anos
+      "15_17": 15 a 17 anos
+      "18_mais": 18 anos ou mais
+      "15_mais": 15 anos ou mais
+      "todas": Todas as idades
+  turno:
+    rotulo: Turno / jornada
+    valores:
+      diurno: Diurno
+      noturno: Noturno
+      ead: Educação a distância
+      integral: Tempo integral
+  zona_residencia:
+    rotulo: Zona de residência do aluno
+    valores:
+      urbana: Urbana
+      rural: Rural
+      nao_aplicavel: Não aplicável
+  classe:
+    rotulo: Tipo de classe (educação especial)
+    valores:
+      comum: Classe comum (inclusão)
+      exclusiva: Classe exclusiva
+  eja_integrada:
+    rotulo: EJA integrada à educação profissional
+    valores:
+      fic: Integrada - formação inicial e continuada (FIC)
+      tecnico: Integrada - curso técnico
+  porte:
+    rotulo: Porte da escola (matrículas de escolarização)
+    valores:
+      sem_matricula: Sem matrícula de escolarização
+      ate_50: Até 50
+      "51_200": 51 a 200
+      "201_500": 201 a 500
+      "501_1000": 501 a 1000
+      mais_1000: Mais de 1000
+  afd_grupo:
+    rotulo: Grupo do indicador de adequação da formação docente
+    valores:
+      "1": "Grupo 1 - formação adequada"
+      "2": "Grupo 2"
+      "3": "Grupo 3"
+      "4": "Grupo 4"
+      "5": "Grupo 5"
+  escolaridade:
+    rotulo: Escolaridade do docente
+    valores:
+      fundamental: Ensino fundamental
+      medio: Ensino médio
+      superior: Ensino superior (graduação)
+      superior_licenciatura: Graduação com licenciatura
+      superior_sem_licenciatura: Graduação sem licenciatura
+      pos_graduacao: Pós-graduação (qualquer)
+      especializacao: Especialização
+      mestrado: Mestrado
+      doutorado: Doutorado
+      superior_sem_pos: Graduação sem pós-graduação
+      total: Total
+  subfuncao:
+    rotulo: Subfunção da despesa
+    valores: {}
+  faixa_populacao:
+    rotulo: Faixa etária da população
+    valores:
+      "0_3": 0 a 3 anos
+      "4_5": 4 a 5 anos
+      "6_14": 6 a 14 anos
+      "15_17": 15 a 17 anos
+      "total": Todas as idades

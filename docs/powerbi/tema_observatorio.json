@@ -1,0 +1,16 @@
+{
+  "name": "Observatório de Educação - Juazeiro",
+  "dataColors": ["#1F4E79", "#E07B39", "#7F8C8D", "#2E8B57", "#C0392B", "#8E44AD", "#F1C40F", "#16A085"],
+  "background": "#FFFFFF",
+  "foreground": "#1B2631",
+  "tableAccent": "#1F4E79",
+  "good": "#2E8B57",
+  "neutral": "#F1C40F",
+  "bad": "#C0392B",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#1F4E79"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1B2631"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 10, "color": "#1B2631"},
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#1F4E79"}
+  }
+}

@@ -1,0 +1,4 @@
+[{"D1C":"Município (Código)","D1N":"Município","D2C":"Variável (Código)","D2N":"Variável","D3C":"Ano (Código)","D3N":"Ano","MC":"Unidade de Medida (Código)","MN":"Unidade de Medida","NC":"Nível Territorial (Código)","NN":"Nível Territorial","V":"Valor"},
+{"D1C":"2918407","D1N":"Juazeiro (BA)","D2C":"37","D2N":"Produto Interno Bruto a preços correntes","D3C":"2021","D3N":"2021","MC":"40","MN":"Mil Reais","NC":"6","NN":"Município","V":"5182686"},
+{"D1C":"2918407","D1N":"Juazeiro (BA)","D2C":"37","D2N":"Produto Interno Bruto a preços correntes","D3C":"2022","D3N":"2022","MC":"40","MN":"Mil Reais","NC":"6","NN":"Município","V":"5505939"},
+{"D1C":"2918407","D1N":"Juazeiro (BA)","D2C":"37","D2N":"Produto Interno Bruto a preços correntes","D3C":"2023","D3N":"2023","MC":"40","MN":"Mil Reais","NC":"6","NN":"Município","V":"6159604"}]

@@ -1,0 +1,39 @@
+# Configuração geral do Observatório.
+# Territórios, período e opções de coleta ficam aqui, nunca fixos no código.
+
+projeto:
+  nome: Observatório da Educação de Juazeiro-BA
+  user_agent: "ObservatorioEducacaoJuazeiro/0.1 (UNIVASF/SEDUC; coleta de dados publicos educacionais)"
+
+territorios:
+  # Código IBGE de 7 dígitos, sempre como texto.
+  municipios_alvo: ["2918407"]          # Juazeiro (BA)
+  # Municípios de comparação (escolas e indicadores também são carregados para eles).
+  # Vazio = só Juazeiro. Para voltar a comparar com Petrolina (PE): ["2611101"]
+  municipios_comparacao: []
+  # UFs carregadas como comparação quando a fonte já traz sem custo extra (código IBGE da UF).
+  ufs_comparacao: ["29"]                # Bahia
+  incluir_brasil: true                  # Brasil (código "1", convenção do SIDRA)
+
+periodo:
+  ano_inicial_padrao: 2015              # linha de base do PME 2015-2025
+  # ano final: o último disponível em cada fonte (descoberto na coleta)
+
+coleta:
+  # Carregar também os arquivos por escola dos Indicadores Educacionais (rendimento e distorção).
+  # São arquivos grandes (30 a 70 MB por ano); desligue se a conexão for lenta.
+  indicadores_por_escola: true
+  # Carregar as planilhas do Ideb por escola (além de município, UF e Brasil).
+  ideb_por_escola: true
+
+qualidade:
+  # Variação anual (em pontos percentuais ou % relativo, conforme a unidade) acima deste limiar gera alerta.
+  limiar_variacao_percentual_pp: 15.0
+  limiar_variacao_relativa: 0.30
+  # Tolerância (em %) na conferência cruzada microdados x Sinopse e SIOPE x SICONFI.
+  tolerancia_conferencia_percentual: 1.0
+
+metodologia:
+  # Versão do método de cálculo dos indicadores. Mude quando alterar uma fórmula:
+  # isso gera uma nova versão dos dados em vez de sobrescrever a anterior.
+  versao_calculo_indicadores: "2026.09.1"

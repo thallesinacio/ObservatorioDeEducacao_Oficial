@@ -1,0 +1,31 @@
+# Consultas à API do SIDRA/IBGE (https://apisidra.ibge.gov.br).
+# URL montada: https://apisidra.ibge.gov.br/values/t/<tabela>/n6/<municípios separados por vírgula>/<caminho>
+# Tabelas, variáveis e categorias verificadas em 29/09/2026 (ver docs/fontes.md).
+#
+# populacao_por_idade: se true, as idades simples da tabela 9514 (Censo 2022) vão para
+# core.fato_populacao (origem ibge_censo2022).
+
+sidra_ibge:
+  - id: populacao_estimada
+    tabela: "6579"
+    caminho: "v/9324/p/all"
+    descricao: População residente estimada (1º de julho). Sem estimativa em 2007, 2010, 2022 e 2023.
+  - id: censo2022_idade
+    tabela: "9514"
+    # c2 6794 = Total (sexo); c287 all = todas as idades (idades simples e grupos); c286 113635 = Total
+    caminho: "v/93/p/all/c2/6794/c287/all/c286/113635"
+    descricao: População residente por idade (Censo 2022).
+    populacao_por_idade: true
+    origem: ibge_censo2022
+    edicao: Censo Demográfico 2022
+  - id: pib
+    tabela: "5938"
+    caminho: "v/37/p/all"
+    descricao: PIB a preços correntes (mil R$).
+
+sidra_alfabetizacao:
+  - id: alfabetizacao_15_mais
+    tabela: "9542"
+    # c59 93024 = Total, 1023 = Alfabetizadas; c2 6794 = Total; c86 95251 = Total; c287 100362 = Total (15 anos ou mais)
+    caminho: "v/950/p/all/c59/93024,1023/c2/6794/c86/95251/c287/100362"
+    descricao: Pessoas de 15 anos ou mais, total e alfabetizadas (Censo 2022).

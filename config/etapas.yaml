@@ -1,0 +1,32 @@
+# Etapas e modalidades (core.dim_etapa).
+etapas:
+  - {codigo: total,       nome: "Não se aplica / todas",                 faixa: "",          agrupamento: total,  ordem: 0}
+  - {codigo: bas,         nome: "Educação Básica",                       faixa: "0 a 17",    agrupamento: bas,    ordem: 1}
+  - {codigo: inf,         nome: "Educação Infantil",                     faixa: "0 a 5",     agrupamento: inf,    ordem: 10}
+  - {codigo: inf_cre,     nome: "Creche",                                faixa: "0 a 3",     agrupamento: inf,    ordem: 11}
+  - {codigo: inf_pre,     nome: "Pré-Escola",                            faixa: "4 a 5",     agrupamento: inf,    ordem: 12}
+  - {codigo: fund,        nome: "Ensino Fundamental",                    faixa: "6 a 14",    agrupamento: fund,   ordem: 20}
+  - {codigo: fund_ai,     nome: "Ensino Fundamental - Anos Iniciais",    faixa: "6 a 10",    agrupamento: fund,   ordem: 21}
+  - {codigo: fund_af,     nome: "Ensino Fundamental - Anos Finais",      faixa: "11 a 14",   agrupamento: fund,   ordem: 22}
+  - {codigo: fund_ano_1,  nome: "1º ano do Ensino Fundamental",          faixa: "6",         agrupamento: fund,   ordem: 31}
+  - {codigo: fund_ano_2,  nome: "2º ano do Ensino Fundamental",          faixa: "7",         agrupamento: fund,   ordem: 32}
+  - {codigo: fund_ano_3,  nome: "3º ano do Ensino Fundamental",          faixa: "8",         agrupamento: fund,   ordem: 33}
+  - {codigo: fund_ano_4,  nome: "4º ano do Ensino Fundamental",          faixa: "9",         agrupamento: fund,   ordem: 34}
+  - {codigo: fund_ano_5,  nome: "5º ano do Ensino Fundamental",          faixa: "10",        agrupamento: fund,   ordem: 35}
+  - {codigo: fund_ano_6,  nome: "6º ano do Ensino Fundamental",          faixa: "11",        agrupamento: fund,   ordem: 36}
+  - {codigo: fund_ano_7,  nome: "7º ano do Ensino Fundamental",          faixa: "12",        agrupamento: fund,   ordem: 37}
+  - {codigo: fund_ano_8,  nome: "8º ano do Ensino Fundamental",          faixa: "13",        agrupamento: fund,   ordem: 38}
+  - {codigo: fund_ano_9,  nome: "9º ano do Ensino Fundamental",          faixa: "14",        agrupamento: fund,   ordem: 39}
+  - {codigo: fund_multi,  nome: "Turmas multietapa, multi ou correção de fluxo", faixa: "",  agrupamento: fund,   ordem: 40}
+  - {codigo: med,         nome: "Ensino Médio",                          faixa: "15 a 17",   agrupamento: med,    ordem: 50}
+  - {codigo: med_serie_1, nome: "1ª série do Ensino Médio",              faixa: "15",        agrupamento: med,    ordem: 51}
+  - {codigo: med_serie_2, nome: "2ª série do Ensino Médio",              faixa: "16",        agrupamento: med,    ordem: 52}
+  - {codigo: med_serie_3, nome: "3ª série do Ensino Médio",              faixa: "17",        agrupamento: med,    ordem: 53}
+  - {codigo: med_serie_4, nome: "4ª série do Ensino Médio",              faixa: "",          agrupamento: med,    ordem: 54}
+  - {codigo: med_ns,      nome: "Ensino Médio não seriado",              faixa: "",          agrupamento: med,    ordem: 55}
+  - {codigo: prof,        nome: "Educação Profissional",                 faixa: "",          agrupamento: prof,   ordem: 60}
+  - {codigo: prof_tec,    nome: "Educação Profissional Técnica",         faixa: "",          agrupamento: prof,   ordem: 61}
+  - {codigo: eja,         nome: "Educação de Jovens e Adultos (EJA)",    faixa: "15 ou mais", agrupamento: eja,   ordem: 70}
+  - {codigo: eja_fund,    nome: "EJA - Ensino Fundamental",              faixa: "15 ou mais", agrupamento: eja,   ordem: 71}
+  - {codigo: eja_med,     nome: "EJA - Ensino Médio",                    faixa: "18 ou mais", agrupamento: eja,   ordem: 72}
+  - {codigo: esp,         nome: "Educação Especial",                     faixa: "",          agrupamento: esp,    ordem: 80}

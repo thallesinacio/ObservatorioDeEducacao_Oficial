@@ -1,0 +1,11 @@
+<html><head><title>TabNet Win32 3.3: População Residente - Estudo de Estimativas Populacionais por Município, Idade e Sexo 2000-2025 - Brasil</title></head><body>
+<form name="Tabnet" method="post" action="http://tabnet.datasus.gov.br/cgi/tabcgi.exe?ibge/cnv/popsvs2024br.def">
+<select name="Linha"><option value="Município">Município</option><option value="Idade_simples">Idade simples</option></select>
+<select name="Coluna"><option value="--Não-Ativa--">Não ativa</option><option value="Ano">Ano</option></select>
+<select name="Incremento" multiple><option value="População_residente" selected>População residente</option></select>
+<select name="Arquivos" multiple><option value="pop25.dbf">2025</option><option value="pop24.dbf">2024</option><option value="pop23.dbf">2023</option><option value="pop22.dbf">2022</option><option value="pop21.dbf">2021</option><option value="pop20.dbf">2020</option><option value="pop19.dbf">2019</option><option value="pop18.dbf">2018</option><option value="pop17.dbf">2017</option><option value="pop16.dbf">2016</option><option value="pop15.dbf">2015</option><option value="pop14.dbf">2014</option><option value="pop13.dbf">2013</option><option value="pop12.dbf">2012</option><option value="pop11.dbf">2011</option><option value="pop10.dbf">2010</option><option value="pop09.dbf">2009</option><option value="pop08.dbf">2008</option><option value="pop07.dbf">2007</option><option value="pop06.dbf">2006</option><option value="pop05.dbf">2005</option><option value="pop04.dbf">2004</option><option value="pop03.dbf">2003</option><option value="pop02.dbf">2002</option><option value="pop01.dbf">2001</option><option value="pop00.dbf">2000</option></select>
+<select name="SMunicípio" multiple><option value="TODAS_AS_CATEGORIAS__" selected>Todas as categorias</option><option value="1">MUNICIPIO IGNORADO - RO</option><option value="2">110001 ALTA FLORESTA D'OESTE</option><option value="1604">261110 PETROLINA</option><option value="2061">291840 JUAZEIRO</option></select>
+<select name="SSexo" multiple><option value="TODAS_AS_CATEGORIAS__" selected>Todas as categorias</option></select>
+<select name="SIdade_simples" multiple><option value="TODAS_AS_CATEGORIAS__" selected>Todas as categorias</option></select>
+<input type="radio" name="formato" value="prn"><input type="submit" name="mostre" value="Mostra">
+</form></body></html>

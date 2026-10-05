@@ -1,0 +1,91 @@
+# Layouts dos microdados do Censo Escolar, por ano.
+# Levantados em 29/09/2026 lendo o cabeçalho real de cada ZIP (ver docs/fontes.md).
+#
+# O coletor:
+#  1. escolhe o layout pelo ano;
+#  2. localiza os arquivos dentro do ZIP pelos padrões (os nomes mudam entre anos);
+#  3. falha com mensagem clara se faltar alguma coluna obrigatória;
+#  4. registra em staging.censo_layout quais variáveis existem no ano (coluna ausente no layout
+#     vira "sem_dado" nos indicadores, nunca zero).
+
+coluna_municipio: CO_MUNICIPIO
+coluna_escola: CO_ENTIDADE
+
+dicionario:
+  padrao_arquivo: 'dicion.*rio.*dados.*\.xlsx$'
+  # Linha de cabeçalho: "N | Nome da Variável | Descrição da Variável | Tipo | Tam. | Categoria | ..."
+  coluna_nome: "nome da variavel"
+  coluna_descricao: "descricao da variavel"
+  coluna_tipo: "tipo"
+  coluna_categoria: "categoria"
+  # Variáveis cujas categorias viram tabela auxiliar de decodificação (core.dim_codigo_inep).
+  variaveis_decodificadas:
+    - TP_DEPENDENCIA
+    - TP_LOCALIZACAO
+    - TP_LOCALIZACAO_DIFERENCIADA
+    - TP_SITUACAO_FUNCIONAMENTO
+    - TP_CATEGORIA_ESCOLA_PRIVADA
+    - TP_AEE
+    - TP_REGULAMENTACAO
+    - TP_OCUPACAO_PREDIO_ESCOLAR
+
+colunas_obrigatorias:
+  - NU_ANO_CENSO
+  - CO_UF
+  - CO_MUNICIPIO
+  - CO_ENTIDADE
+  - NO_ENTIDADE
+  - TP_DEPENDENCIA
+  - TP_LOCALIZACAO
+  - TP_SITUACAO_FUNCIONAMENTO
+  - QT_MAT_BAS
+
+# Colunas de cadastro/infraestrutura copiadas para staging.censo_escola quando existem.
+colunas_escola:
+  TP_CATEGORIA_ESCOLA_PRIVADA: tp_categoria_escola_privada
+  TP_LOCALIZACAO_DIFERENCIADA: tp_localizacao_diferenciada
+  NO_BAIRRO: no_bairro
+  CO_DISTRITO: co_distrito
+  IN_INTERNET: in_internet
+  IN_BANDA_LARGA: in_banda_larga
+  IN_BIBLIOTECA: in_biblioteca
+  IN_BIBLIOTECA_SALA_LEITURA: in_biblioteca_sala_leitura
+  IN_SALA_LEITURA: in_sala_leitura
+  IN_LABORATORIO_CIENCIAS: in_laboratorio_ciencias
+  IN_LABORATORIO_INFORMATICA: in_laboratorio_informatica
+  IN_QUADRA_ESPORTES: in_quadra_esportes
+  IN_ACESSIBILIDADE_INEXISTENTE: in_acessibilidade_inexistente
+  IN_BANHEIRO_PNE: in_banheiro_pne
+  IN_AGUA_POTAVEL: in_agua_potavel
+  IN_ENERGIA_REDE_PUBLICA: in_energia_rede_publica
+  IN_ESGOTO_REDE_PUBLICA: in_esgoto_rede_publica
+  IN_SALA_ATENDIMENTO_ESPECIAL: in_sala_atendimento_especial
+  IN_ALIMENTACAO: in_alimentacao
+  TP_AEE: tp_aee
+
+layouts:
+  L2015:
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021]
+    descricao: "Arquivo único microdados_ed_basica_AAAA.csv (370 colunas); 2020 com extensão .CSV"
+    tabelas:
+      microdados_ed_basica: 'microdados_ed_basica_\d{4}\.csv$'
+  L2022:
+    anos: [2022]
+    descricao: "Arquivo único (385 colunas); pasta interna com nome acentuado"
+    tabelas:
+      microdados_ed_basica: 'microdados_ed_basica_\d{4}\.csv$'
+  L2023:
+    anos: [2023, 2024]
+    descricao: "Arquivo único (408/426 colunas) + suplemento de cursos técnicos (não usado); matrículas por ano/série e EJA integrada passam a existir"
+    tabelas:
+      microdados_ed_basica: 'microdados_ed_basica_\d{4}\.csv$'
+  L2025:
+    anos: [2025]
+    descricao: "Seis tabelas separadas (Escola, Matricula, Docente, Turma, Gestor, Curso Técnico), todas no nível da escola; docentes por escolaridade passam a existir; sem endereço/bairro"
+    tabelas:
+      Tabela_Escola: 'Tabela_Escola_\d{4}.*\.csv$'
+      Tabela_Matricula: 'Tabela_Matricula_\d{4}.*\.csv$'
+      Tabela_Docente: 'Tabela_Docente_\d{4}.*\.csv$'
+      Tabela_Turma: 'Tabela_Turma_\d{4}.*\.csv$'
+  # Anos futuros: se o INEP mantiver o layout de 2025, basta acrescentar o ano em L2025.
+  # Um ano sem layout configurado faz o coletor parar com mensagem pedindo o ajuste.

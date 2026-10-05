@@ -1,0 +1,21 @@
+# Tabelas da Sinopse Estatística da Educação Básica usadas pelo Observatório.
+# A numeração das tabelas muda entre anos (ex.: 2025), por isso cada tabela é localizada pelo
+# TÍTULO (célula "1.1 – Número de Matrículas ...", nas primeiras linhas da aba), comparado sem
+# acentos e em minúsculas. A primeira aba cujo título casa com "titulo" e não casa com "excluir"
+# é usada.
+#
+# Títulos verificados na Sinopse 2024 (29/09/2026):
+#   "1.1 – Número de Matrículas da Educação Básica, por Etapa de Ensino, segundo a Região
+#    Geográfica, a Unidade da Federação e o Município - 2024"
+#   "2.4 – Número de Docentes da Educação Básica, por Nível de Escolaridade e Formação Acadêmica,
+#    segundo a Região Geográfica, a Unidade da Federação e o Município - 2024"
+
+tabelas:
+  matriculas_etapa:
+    titulo: "numero de matriculas da educacao basica,? por etapa de ensino,? segundo .*municipio"
+    excluir: "dependencia|localizacao|sexo|cor/raca|faixa etaria|turno|rede publica"
+    medida: matriculas
+  docentes_escolaridade:
+    titulo: "numero de docentes da educacao basica,? por (nivel de )?escolaridade.*segundo .*municipio"
+    excluir: "rede publica|dependencia administrativa e"
+    medida: docentes_escolaridade

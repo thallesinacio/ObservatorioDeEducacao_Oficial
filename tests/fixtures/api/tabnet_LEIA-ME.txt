@@ -1,0 +1,1 @@
+(recorte real da resposta do TabNet em 29/09/2026: idades 0-23 e 78-80+ de Juazeiro, 2023-2025)

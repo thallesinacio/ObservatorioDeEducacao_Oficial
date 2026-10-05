@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "observatorio"
+version = "0.1.0"
+description = "Observatório da Educação de Juazeiro-BA: coleta de dados públicos, banco PostgreSQL e camada para Power BI"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Observatório da Educação de Juazeiro-BA (UNIVASF/SEDUC)" }]
+dependencies = [
+  "requests>=2.31",
+  "tenacity>=8.2",
+  "pandas>=2.1",
+  "openpyxl>=3.1",
+  "lxml>=5.0",
+  "beautifulsoup4>=4.12",
+  "psycopg[binary]>=3.1",
+  "typer>=0.12",
+  "pydantic-settings>=2.2",
+  "PyYAML>=6.0",
+  "dbfread>=2.0",
+  "truststore>=0.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[project.scripts]
+observatorio = "observatorio.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not rede' -q"
+markers = [
+  "rede: testes que acessam a internet (fora da execução padrão; rode com -m rede)",
+  "banco: testes que exigem PostgreSQL rodando (são pulados automaticamente se o banco não responder)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "E741", "B007", "B008", "B023", "B905"]  # B008: padrão do typer; B023: funções internas usadas na mesma iteração

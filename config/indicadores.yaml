@@ -1,0 +1,868 @@
+# Definição dos indicadores do Observatório.
+# Carregada em core.dim_indicador por "python -m observatorio db migrar" (e a cada pipeline).
+# Um indicador com vários desdobramentos (ex.: B1 aprovação/reprovação/abandono) tem um código
+# por medida ("B1.aprovacao") e o campo "grupo" com o código do plano ("B1").
+#
+# polaridade: maior_melhor | menor_melhor | neutro
+# cobertura: automatica (calculado nesta etapa) | pendente (fonte pública ainda não viável)
+#            | manual_futura (depende de coleta com a SEDUC)
+
+nota_atendimento: &nota_atendimento >
+  Cálculo do Observatório. Numerador: matrículas da educação básica de alunos na faixa etária
+  (contagens QT_MAT_BAS_* dos microdados do Censo Escolar, idade na data de referência do Censo,
+  todas as redes, escolas do município). Denominador: população residente na faixa etária
+  (estimativas RIPSA/DATASUS por idade simples). A edição da estimativa usada fica gravada junto
+  do valor. ATENÇÃO: o Censo Escolar conta a matrícula no município da escola, não no de
+  residência do aluno. Com o fluxo diário entre Juazeiro e Petrolina a taxa pode ficar distorcida
+  para cima ou para baixo; ela NÃO é limitada a 100% e um teste de qualidade emite alerta quando
+  passa disso. Conta matrículas, não pessoas.
+
+indicadores:
+  # ---------------------------------------------------------------- Eixo A: acesso
+  - codigo: A1
+    grupo: A1
+    eixo: A - Acesso e atendimento
+    nome: Taxa de atendimento escolar de 0 a 3 anos
+    definicao: Percentual da população de 0 a 3 anos matriculada na educação básica.
+    formula: "100 × QT_MAT_BAS_0_3 ÷ população de 0 a 3 anos"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "1B"
+    meta_valor: "50% até 2025"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: *nota_atendimento
+
+  - codigo: A2
+    grupo: A2
+    eixo: A - Acesso e atendimento
+    nome: Taxa de atendimento escolar de 4 a 5 anos
+    definicao: Percentual da população de 4 a 5 anos matriculada na educação básica.
+    formula: "100 × QT_MAT_BAS_4_5 ÷ população de 4 a 5 anos"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "1A"
+    meta_valor: "100% até 2016"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: *nota_atendimento
+
+  - codigo: A3
+    grupo: A3
+    eixo: A - Acesso e atendimento
+    nome: Taxa de atendimento escolar de 6 a 14 anos
+    definicao: Percentual da população de 6 a 14 anos matriculada na educação básica.
+    formula: "100 × (QT_MAT_BAS_6_10 + QT_MAT_BAS_11_14) ÷ população de 6 a 14 anos"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "2A"
+    meta_valor: "100%"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: *nota_atendimento
+
+  - codigo: A4
+    grupo: A4
+    eixo: A - Acesso e atendimento
+    nome: Taxa de atendimento escolar de 15 a 17 anos
+    definicao: Percentual da população de 15 a 17 anos matriculada na educação básica.
+    formula: "100 × QT_MAT_BAS_15_17 ÷ população de 15 a 17 anos"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "3A"
+    meta_valor: "100% até 2016"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: *nota_atendimento
+
+  - codigo: A5
+    grupo: A5
+    eixo: A - Acesso e atendimento
+    nome: Taxa líquida de matrícula no ensino médio (15 a 17 anos)
+    definicao: Percentual da população de 15 a 17 anos matriculada no ensino médio.
+    formula: "100 × matrículas de 15 a 17 anos no ensino médio ÷ população de 15 a 17 anos"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "3B"
+    meta_valor: "85%"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: pendente
+    nota_metodologica: >
+      Sem cobertura: os microdados públicos do Censo Escolar trazem matrículas por faixa etária
+      (toda a educação básica) e por etapa, mas não o cruzamento idade × etapa. Ver docs/pendencias.md.
+
+  - codigo: A6
+    grupo: A6
+    eixo: A - Acesso e atendimento
+    nome: Matrículas por etapa, rede e localização
+    definicao: Número de matrículas de escolarização, por etapa/modalidade, dependência administrativa e localização da escola.
+    formula: "Soma de QT_MAT_<etapa> das escolas do município"
+    unidade: matrículas
+    polaridade: neutro
+    meta_pme: "1-3, 6"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: censo_escolar
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Soma das contagens por escola publicadas nos microdados do Censo Escolar (escolas em atividade).
+
+  - codigo: A7
+    grupo: A7
+    eixo: A - Acesso e atendimento
+    nome: Escolas em atividade por rede, localização e porte
+    definicao: Número de escolas com situação de funcionamento "em atividade", por dependência, localização e porte (faixa de matrículas de escolarização).
+    formula: "Contagem de escolas com TP_SITUACAO_FUNCIONAMENTO = 1"
+    unidade: escolas
+    polaridade: neutro
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: censo_escolar
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: >
+      Porte definido pelo Observatório pelo total de matrículas de escolarização (QT_MAT_BAS):
+      sem matrícula, até 50, 51 a 200, 201 a 500, 501 a 1000 e mais de 1000.
+
+  # ---------------------------------------------------------------- Eixo B: fluxo
+  - codigo: B1.aprovacao
+    grupo: B1
+    eixo: B - Fluxo escolar
+    nome: Taxa de aprovação
+    definicao: Taxa de aprovação por etapa, publicada pelo INEP (Indicadores Educacionais).
+    formula: Publicada pelo INEP
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "2, 7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: inep_rendimento
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP, por localização e dependência administrativa. Marcadores "--" e similares viram "sem_dado".
+
+  - codigo: B1.reprovacao
+    grupo: B1
+    eixo: B - Fluxo escolar
+    nome: Taxa de reprovação
+    definicao: Taxa de reprovação por etapa, publicada pelo INEP (Indicadores Educacionais).
+    formula: Publicada pelo INEP
+    unidade: "%"
+    polaridade: menor_melhor
+    meta_pme: "2, 7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: inep_rendimento
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: B1.abandono
+    grupo: B1
+    eixo: B - Fluxo escolar
+    nome: Taxa de abandono
+    definicao: Taxa de abandono por etapa, publicada pelo INEP (Indicadores Educacionais).
+    formula: Publicada pelo INEP
+    unidade: "%"
+    polaridade: menor_melhor
+    meta_pme: "2, 7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: inep_rendimento
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: B2
+    grupo: B2
+    eixo: B - Fluxo escolar
+    nome: Taxa de distorção idade-série
+    definicao: Percentual de alunos com dois anos ou mais de atraso escolar, por etapa.
+    formula: Publicada pelo INEP
+    unidade: "%"
+    polaridade: menor_melhor
+    meta_pme: "2, 7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: inep_distorcao
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: B3
+    grupo: B3
+    eixo: B - Fluxo escolar
+    nome: Taxa de conclusão do ensino fundamental aos 16 anos
+    definicao: Percentual de jovens de 16 anos que concluíram o ensino fundamental.
+    formula: IBGE (Censo/PNAD); sem recorte municipal anual
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "2B"
+    meta_valor: "95%"
+    nivel_agregacao: municipio
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Sem fonte pública municipal anual. Cadastrado para a página de qualidade do dado.
+
+  - codigo: B4
+    grupo: B4
+    eixo: B - Fluxo escolar
+    nome: Abandono e infrequência na rede municipal, por escola
+    definicao: Alunos com infrequência ou abandono no bimestre, por escola.
+    formula: SIEJ / Busca Ativa Escolar
+    unidade: "%"
+    polaridade: menor_melhor
+    meta_pme: "2, 5"
+    meta_valor: ""
+    nivel_agregacao: escola
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Depende de dados internos da SEDUC (etapa futura).
+
+  # ---------------------------------------------------------------- Eixo C: aprendizagem
+  - codigo: C1
+    grupo: C1
+    eixo: C - Aprendizagem
+    nome: Ideb observado
+    definicao: Índice de Desenvolvimento da Educação Básica observado, por etapa (anos iniciais, anos finais, ensino médio) e rede.
+    formula: Publicado pelo INEP (nota padronizada do Saeb × indicador de rendimento)
+    unidade: índice (0 a 10)
+    polaridade: maior_melhor
+    meta_pme: "7A-7C"
+    meta_valor: "6,0 (AI), 5,5 (AF), 5,3 (EM) em 2021"
+    nivel_agregacao: municipio_e_escola
+    fonte: ideb
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP. Cada edição baixada é guardada; o banco mostra a edição mais recente.
+
+  - codigo: C1.meta
+    grupo: C1
+    eixo: C - Aprendizagem
+    nome: Meta do Ideb (projeção do INEP)
+    definicao: Meta intermediária do Ideb projetada pelo INEP para a rede/escola.
+    formula: Publicada pelo INEP
+    unidade: índice (0 a 10)
+    polaridade: neutro
+    meta_pme: "7A-7C"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: ideb
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Metas projetadas até 2021; edições seguintes não trazem novas metas.
+
+  - codigo: C2.matematica
+    grupo: C2
+    eixo: C - Aprendizagem
+    nome: Proficiência média no Saeb - Matemática
+    definicao: Nota média do Saeb em Matemática (5º ano, 9º ano e ensino médio), publicada nas planilhas do Ideb.
+    formula: Publicada pelo INEP
+    unidade: pontos (escala Saeb)
+    polaridade: maior_melhor
+    meta_pme: "7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: ideb
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: C2.lingua_portuguesa
+    grupo: C2
+    eixo: C - Aprendizagem
+    nome: Proficiência média no Saeb - Língua Portuguesa
+    definicao: Nota média do Saeb em Língua Portuguesa (5º ano, 9º ano e ensino médio), publicada nas planilhas do Ideb.
+    formula: Publicada pelo INEP
+    unidade: pontos (escala Saeb)
+    polaridade: maior_melhor
+    meta_pme: "7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: ideb
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: C2.rendimento_ideb
+    grupo: C2
+    eixo: C - Aprendizagem
+    nome: Indicador de rendimento do Ideb (P)
+    definicao: Indicador de rendimento (fluxo) usado no cálculo do Ideb.
+    formula: Publicado pelo INEP
+    unidade: proporção (0 a 1)
+    polaridade: maior_melhor
+    meta_pme: "7"
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: ideb
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: C3
+    grupo: C3
+    eixo: C - Aprendizagem
+    nome: Percentual de alunos em nível adequado de aprendizado (Saeb)
+    definicao: Percentual de alunos nos níveis considerados adequados da escala do Saeb.
+    formula: Resultados do Saeb
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "5, 7"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: saeb
+    eh_calculo_proprio: false
+    cobertura: pendente
+    nota_metodologica: Fonte P2 ainda não implementada (docs/pendencias.md).
+
+  - codigo: C4
+    grupo: C4
+    eixo: C - Aprendizagem
+    nome: Alfabetização ao fim do 2º ano (Indicador Criança Alfabetizada)
+    definicao: Percentual de crianças alfabetizadas ao fim do 2º ano do ensino fundamental (ICA/INEP).
+    formula: Publicado pelo INEP
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "5A-5C"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: ica
+    eh_calculo_proprio: false
+    cobertura: pendente
+    nota_metodologica: >
+      O PME define a meta 5 para o 3º ano; o ICA mede o 2º ano. Os rótulos ficam separados e as
+      séries nunca são unidas. Fonte P2 (ver docs/pendencias.md).
+
+  - codigo: C5
+    grupo: C5
+    eixo: C - Aprendizagem
+    nome: Resultados das avaliações diagnósticas da rede municipal
+    definicao: Resultados das avaliações próprias da SEDUC.
+    formula: SEDUC / SIEJ
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "5"
+    meta_valor: ""
+    nivel_agregacao: escola
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Depende de dados internos da SEDUC.
+
+  # ---------------------------------------------------------------- Eixo D: tempo integral, infraestrutura, inclusão
+  - codigo: D1
+    grupo: D1
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de matrículas em tempo integral (rede pública)
+    definicao: Percentual das matrículas de educação infantil, ensino fundamental e ensino médio da rede pública que são em tempo integral.
+    formula: "100 × (QT_MAT_INF_INT + QT_MAT_FUND_INT + QT_MAT_MED_INT) ÷ (QT_MAT_INF + QT_MAT_FUND + QT_MAT_MED), escolas públicas em atividade"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "6B"
+    meta_valor: "25%"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: >
+      Tempo integral segundo o INEP (35 horas semanais ou mais, somando atividade complementar e
+      AEE). Denominador restrito ao ensino regular (EJA e educação profissional fora).
+
+  - codigo: D2
+    grupo: D2
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de escolas públicas com matrícula em tempo integral
+    definicao: Escolas públicas em atividade com pelo menos uma matrícula em tempo integral, sobre as escolas públicas com matrícula no ensino regular.
+    formula: "100 × escolas públicas com (QT_MAT_INF_INT + QT_MAT_FUND_INT + QT_MAT_MED_INT) > 0 ÷ escolas públicas com (QT_MAT_INF + QT_MAT_FUND + QT_MAT_MED) > 0"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "6A"
+    meta_valor: "50%"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: Cálculo do Observatório a partir dos microdados do Censo Escolar.
+
+  - codigo: D3
+    grupo: D3
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Índice de infraestrutura escolar
+    definicao: Média simples, de 0 a 100, de cinco itens de infraestrutura presentes na escola.
+    formula: >
+      Por escola: 100 × média de [IN_INTERNET; biblioteca ou sala de leitura (IN_BIBLIOTECA ou
+      IN_BIBLIOTECA_SALA_LEITURA); laboratório (IN_LABORATORIO_CIENCIAS ou
+      IN_LABORATORIO_INFORMATICA); IN_QUADRA_ESPORTES; alguma acessibilidade
+      (IN_ACESSIBILIDADE_INEXISTENTE = 0)]. Município: média das escolas em atividade.
+    unidade: índice (0 a 100)
+    polaridade: maior_melhor
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: Escola com algum item não informado fica sem índice (não entra como zero).
+
+  - codigo: D4
+    grupo: D4
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de matrículas da educação especial em classes comuns
+    definicao: Matrículas de alunos da educação especial em classes comuns (inclusão), sobre o total de matrículas da educação especial.
+    formula: "100 × QT_MAT_ESP_CC ÷ QT_MAT_ESP"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "4A"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: >
+      Reconstrói a meta 4 pelo Censo Escolar, onde o relatório do PME não conseguiu medir pelo IBGE.
+      Não é taxa de atendimento: mede inclusão entre os matriculados.
+
+  - codigo: D5.escolas_sala_recursos
+    grupo: D5
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de escolas públicas com sala de atendimento especial
+    definicao: Escolas públicas em atividade com sala de atendimento educacional especializado (IN_SALA_ATENDIMENTO_ESPECIAL).
+    formula: "100 × escolas públicas com IN_SALA_ATENDIMENTO_ESPECIAL = 1 ÷ escolas públicas em atividade"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "4"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: Os microdados públicos não trazem matrículas em AEE por escola; usa-se a oferta.
+
+  - codigo: D5.escolas_oferta_aee
+    grupo: D5
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de escolas que oferecem atendimento educacional especializado (AEE)
+    definicao: Escolas em atividade que oferecem AEE (TP_AEE = 1 ou 2).
+    formula: "100 × escolas com TP_AEE em (1, 2) ÷ escolas em atividade"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "4"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: ""
+
+  - codigo: D5.matriculas_educacao_especial
+    grupo: D5
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Matrículas da educação especial
+    definicao: Número de matrículas da educação especial (classes comuns e exclusivas).
+    formula: "Soma de QT_MAT_ESP"
+    unidade: matrículas
+    polaridade: neutro
+    meta_pme: "4"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: censo_escolar
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: ""
+
+  - codigo: D6.matriculas_eja
+    grupo: D6
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Matrículas na EJA
+    definicao: Número de matrículas na educação de jovens e adultos, por etapa.
+    formula: "Soma de QT_MAT_EJA, QT_MAT_EJA_FUND, QT_MAT_EJA_MED"
+    unidade: matrículas
+    polaridade: neutro
+    meta_pme: "10"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: censo_escolar
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: ""
+
+  - codigo: D6.pct_eja_integrada
+    grupo: D6
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Percentual de matrículas de EJA integradas à educação profissional
+    definicao: Matrículas de EJA integradas à educação profissional (FIC ou técnico) sobre o total da EJA da etapa.
+    formula: "EJA fundamental: 100 × QT_MAT_EJA_FUND_FIC ÷ QT_MAT_EJA_FUND; EJA médio: 100 × (QT_MAT_EJA_MED_TEC + QT_MAT_EJA_MED_FIC) ÷ QT_MAT_EJA_MED"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "10A, 10B"
+    meta_valor: "25%"
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: >
+      As colunas de EJA integrada só existem nos microdados a partir de 2023; antes disso o
+      indicador fica "sem_dado" (quebra de série por layout, não por realidade).
+
+  - codigo: D7
+    grupo: D7
+    eixo: D - Tempo integral, infraestrutura e inclusão
+    nome: Distribuição das matrículas por cor/raça e sexo
+    definicao: Percentual das matrículas da educação básica em cada categoria de cor/raça e de sexo.
+    formula: "100 × QT_MAT_BAS_<categoria> ÷ QT_MAT_BAS"
+    unidade: "%"
+    polaridade: neutro
+    meta_pme: "8D"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: Inclui a categoria "não declarada", que é relevante para ler a qualidade do registro.
+
+  # ---------------------------------------------------------------- Eixo E: profissionais
+  - codigo: E1
+    grupo: E1
+    eixo: E - Profissionais da educação
+    nome: Percentual de docentes com curso superior
+    definicao: Percentual de docentes da educação básica com curso superior, por etapa (indicador DSU do INEP).
+    formula: Publicado pelo INEP
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "15A"
+    meta_valor: "100%"
+    nivel_agregacao: municipio
+    fonte: inep_dsu
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: E2
+    grupo: E2
+    eixo: E - Profissionais da educação
+    nome: Adequação da formação docente (grupo 1)
+    definicao: Percentual de docências com formação adequada à disciplina que lecionam (grupo 1 do indicador AFD do INEP), por etapa. Os grupos 2 a 5 ficam como recorte.
+    formula: Publicado pelo INEP
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "15B, 15C"
+    meta_valor: "100%"
+    nivel_agregacao: municipio
+    fonte: inep_afd
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP. O recorte "afd_grupo:N" guarda cada grupo.
+
+  - codigo: E3
+    grupo: E3
+    eixo: E - Profissionais da educação
+    nome: Percentual de docentes com pós-graduação
+    definicao: Percentual de docentes da educação básica com especialização, mestrado ou doutorado.
+    formula: "100 × docentes com pós-graduação ÷ total de docentes (Sinopse Estatística)"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "16A"
+    meta_valor: "50%"
+    nivel_agregacao: municipio
+    fonte: sinopse_estatistica
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: Contagem de docentes únicos por município (Sinopse), por isso não soma as escolas.
+
+  - codigo: E4
+    grupo: E4
+    eixo: E - Profissionais da educação
+    nome: Percentual de docentes em formação continuada
+    definicao: Docentes que participaram de formação continuada no ano.
+    formula: Registros da SEDUC
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "16B"
+    meta_valor: "100%"
+    nivel_agregacao: municipio
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Depende de dados internos da SEDUC.
+
+  - codigo: E5.alunos_por_turma
+    grupo: E5
+    eixo: E - Profissionais da educação
+    nome: Média de alunos por turma
+    definicao: Média de alunos por turma por etapa (indicador ATU do INEP).
+    formula: Publicado pelo INEP
+    unidade: alunos por turma
+    polaridade: neutro
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: inep_atu
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do INEP.
+
+  - codigo: E5.alunos_por_docente
+    grupo: E5
+    eixo: E - Profissionais da educação
+    nome: Relação matrículas por docente
+    definicao: Matrículas de escolarização dividido pelo número de docentes, somados por escola.
+    formula: "Soma de QT_MAT_BAS ÷ soma de QT_DOC_BAS (escolas em atividade)"
+    unidade: matrículas por docente
+    polaridade: neutro
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio_e_escola
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: >
+      O docente que atua em mais de uma escola é contado em cada uma, então a relação municipal
+      fica subestimada. Use para comparar escolas e anos, não como número oficial.
+
+  - codigo: E6
+    grupo: E6
+    eixo: E - Profissionais da educação
+    nome: Remuneração média do magistério municipal frente ao piso nacional
+    definicao: Remuneração média por cargo e carga horária, agregada, frente ao piso nacional.
+    formula: Folha da SEDUC (agregada)
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "17A"
+    meta_valor: "100%"
+    nivel_agregacao: municipio
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Depende de dados internos da SEDUC; nunca por servidor.
+
+  # ---------------------------------------------------------------- Eixo F: financiamento
+  - codigo: F1
+    grupo: F1
+    eixo: F - Financiamento e gestão
+    nome: Percentual da receita de impostos aplicado em MDE
+    definicao: Percentual das receitas de impostos e transferências aplicado em manutenção e desenvolvimento do ensino (mínimo constitucional de 25%).
+    formula: "Indicador 1.1 do SIOPE (COD_INDI 24 para municípios)"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "20"
+    meta_valor: "mínimo de 25%"
+    nivel_agregacao: municipio
+    fonte: siope
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor declarado pelo município ao SIOPE (6º bimestre).
+
+  - codigo: F2
+    grupo: F2
+    eixo: F - Financiamento e gestão
+    nome: Investimento por aluno na rede municipal (cálculo do Observatório)
+    definicao: Despesa liquidada na função Educação dividida pelas matrículas da rede municipal no Censo Escolar do mesmo ano.
+    formula: "VL_DESP_LIQU_EDU (SIOPE, Dados Gerais) ÷ soma de QT_MAT_BAS das escolas municipais"
+    unidade: R$ por matrícula
+    polaridade: maior_melhor
+    meta_pme: "20B"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: >
+      Cálculo do Observatório: não é o número oficial. O indicador oficial do SIOPE (4.8,
+      investimento educacional por aluno da educação básica) fica em F2.siope para comparação.
+      Valores nominais (sem correção pela inflação).
+
+  - codigo: F2.siope
+    grupo: F2
+    eixo: F - Financiamento e gestão
+    nome: Investimento educacional por aluno da educação básica (SIOPE 4.8)
+    definicao: Indicador oficial declarado ao SIOPE.
+    formula: "Indicador 4.8 do SIOPE (COD_INDI 56)"
+    unidade: R$ por aluno
+    polaridade: maior_melhor
+    meta_pme: "20B"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: siope
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Valor oficial do SIOPE.
+
+  - codigo: F3
+    grupo: F3
+    eixo: F - Financiamento e gestão
+    nome: Despesa em educação por subfunção
+    definicao: Despesa liquidada na função 12 - Educação, por subfunção (Declaração de Contas Anuais).
+    formula: "SICONFI, DCA Anexo I-E, coluna Despesas Liquidadas, contas 12.*"
+    unidade: R$
+    polaridade: neutro
+    meta_pme: "20"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: siconfi
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Execução por programa da SEDUC (portal da transparência) fica para etapa futura.
+
+  - codigo: F4
+    grupo: F4
+    eixo: F - Financiamento e gestão
+    nome: Recursos do Fundeb recebidos
+    definicao: Receitas realizadas de transferências do Fundeb, incluindo a complementação da União.
+    formula: "Soma das rubricas de receita do Fundeb declaradas ao SIOPE (lista por período em config/siope.yaml)"
+    unidade: R$
+    polaridade: neutro
+    meta_pme: "20"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: siope
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: >
+      A classificação da receita mudou com o novo Fundeb (Lei 14.113/2020): até 2020 as rubricas
+      são 1.7.2.4.01 e 1.7.2.4.02; de 2021 em diante, 1.7.5.1.00.00 e 1.7.1.5.00.00. É quebra
+      de classificação, não de realidade.
+
+  - codigo: F5
+    grupo: F5
+    eixo: F - Financiamento e gestão
+    nome: Vigência dos instrumentos de gestão (PME, plano de carreira, CME)
+    definicao: Situação dos instrumentos legais de gestão da educação no município.
+    formula: Legislação municipal (SAPL)
+    unidade: situação
+    polaridade: neutro
+    meta_pme: "18, 19"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: manual_seduc
+    eh_calculo_proprio: false
+    cobertura: manual_futura
+    nota_metodologica: Coleta manual (etapa futura).
+
+  # ---------------------------------------------------------------- Eixo G: contexto
+  - codigo: G1
+    grupo: G1
+    eixo: G - Contexto e denominadores
+    nome: População residente por faixa etária (estimativa RIPSA)
+    definicao: População residente estimada por faixa etária escolar (0-3, 4-5, 6-14, 15-17) e total.
+    formula: Soma das idades simples das estimativas RIPSA/DATASUS
+    unidade: pessoas
+    polaridade: neutro
+    meta_pme: "1-4, 8, 9, 12"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: populacao_datasus
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: >
+      Estimativa, não contagem: status "estimado". A edição da estimativa fica gravada em
+      "referencia" e em core.fato_populacao. Denominador das taxas A1 a A4.
+
+  - codigo: G1.ibge_total
+    grupo: G1
+    eixo: G - Contexto e denominadores
+    nome: População residente estimada total (IBGE)
+    definicao: Estimativa oficial de população total do IBGE (tabela SIDRA 6579).
+    formula: Publicada pelo IBGE
+    unidade: pessoas
+    polaridade: neutro
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: sidra_ibge
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Em anos de censo o IBGE não publica estimativa nesta tabela.
+
+  - codigo: G1.censo2022
+    grupo: G1
+    eixo: G - Contexto e denominadores
+    nome: População residente por faixa etária (Censo 2022)
+    definicao: Contagem do Censo Demográfico 2022 por faixa etária escolar (SIDRA 9514).
+    formula: Soma das idades simples
+    unidade: pessoas
+    polaridade: neutro
+    meta_pme: ""
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: sidra_ibge
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Referência para comparar com a estimativa RIPSA de 2022.
+
+  - codigo: G2
+    grupo: G2
+    eixo: G - Contexto e denominadores
+    nome: Taxa de alfabetização de 15 anos ou mais (Censo 2022)
+    definicao: Pessoas de 15 anos ou mais alfabetizadas sobre o total de pessoas de 15 anos ou mais.
+    formula: "100 × alfabetizadas ÷ total (SIDRA 9542, variável 950)"
+    unidade: "%"
+    polaridade: maior_melhor
+    meta_pme: "9"
+    meta_valor: "erradicar o analfabetismo"
+    nivel_agregacao: municipio
+    fonte: sidra_alfabetizacao
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Só existe no ano do Censo (2022). Analfabetismo funcional não tem recorte municipal.
+
+  - codigo: G3.pib
+    grupo: G3
+    eixo: G - Contexto e denominadores
+    nome: PIB municipal a preços correntes
+    definicao: Produto Interno Bruto a preços correntes (SIDRA 5938, variável 37).
+    formula: Publicado pelo IBGE
+    unidade: mil R$
+    polaridade: neutro
+    meta_pme: "20"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: sidra_ibge
+    eh_calculo_proprio: false
+    cobertura: automatica
+    nota_metodologica: Defasagem típica de dois anos.
+
+  - codigo: G3.pib_per_capita
+    grupo: G3
+    eixo: G - Contexto e denominadores
+    nome: PIB per capita (cálculo do Observatório)
+    definicao: PIB a preços correntes dividido pela população residente estimada do IBGE no mesmo ano.
+    formula: "1000 × PIB (mil R$, SIDRA 5938) ÷ população estimada (SIDRA 6579)"
+    unidade: R$ por habitante
+    polaridade: neutro
+    meta_pme: "20"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: calculo_observatorio
+    eh_calculo_proprio: true
+    cobertura: automatica
+    nota_metodologica: "Sem estimativa do IBGE no ano (ex.: 2022, ano do Censo) o valor fica sem dado."
+
+  - codigo: G4
+    grupo: G4
+    eixo: G - Contexto e denominadores
+    nome: Matrículas e concluintes do ensino superior na região
+    definicao: Matrículas e concluintes em cursos sediados em Juazeiro e Petrolina; titulados de mestrado e doutorado.
+    formula: Censo da Educação Superior e CAPES
+    unidade: matrículas
+    polaridade: neutro
+    meta_pme: "12-14"
+    meta_valor: ""
+    nivel_agregacao: municipio
+    fonte: censo_superior
+    eh_calculo_proprio: false
+    cobertura: pendente
+    nota_metodologica: Fonte P2 ainda não implementada (docs/pendencias.md).

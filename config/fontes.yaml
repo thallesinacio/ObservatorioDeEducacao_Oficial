@@ -1,0 +1,310 @@
+# Catálogo de fontes do Observatório.
+# Uma entrada por fonte. Os campos são carregados em core.dim_fonte.
+# "pagina_oficial" é lida pelo coletor para descobrir os links (o INEP muda caminhos e nomes
+# de arquivo entre publicações); "padrao_url" é só o fallback, usado se a página mudar.
+# Verificações feitas em 29/09/2026 estão resumidas em docs/fontes.md.
+
+fontes:
+  - id: censo_escolar
+    nome: Microdados do Censo Escolar da Educação Básica
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar
+    padrao_url: https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_{ano}.zip
+    tipo_acesso: download
+    formato: ZIP com CSV (separador ';', latin-1) e dicionário de dados em XLSX
+    periodicidade: anual
+    anos_disponiveis: "1995-2025 (2025 com layout novo em tabelas separadas)"
+    licenca: Dados abertos (Lei de Acesso à Informação); citar a fonte INEP
+    latencia_tipica: publicação cerca de 8 a 14 meses após a data de referência
+    modulo: observatorio.coleta.censo_escolar
+    observacoes: >
+      Microdados públicos no nível da escola (contagens QT_* e indicadores IN_*), sem grão de aluno,
+      docente ou turma. Layouts: 2015-2021 (370 colunas), 2022 (385), 2023-2024 (408/426) e 2025
+      (seis tabelas: Escola, Matricula, Docente, Turma, Gestor e Curso Técnico). O arquivo de 2025
+      tem nome com sublinhado final (microdados_censo_escolar_2025_.zip), por isso os links são
+      lidos da página.
+
+  - id: sinopse_estatistica
+    nome: Sinopse Estatística da Educação Básica
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/sinopses-estatisticas/educacao-basica
+    padrao_url: https://download.inep.gov.br/dados_abertos/sinopses_estatisticas/sinopse_estatistica_censo_escolar_{ano}.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX (uma aba por tabela; linhas por município)
+    periodicidade: anual
+    anos_disponiveis: "2015-2025 verificados (arquivos de 2015-2019 em informacoes_estatisticas/, 2020 em diante em dados_abertos/)"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: junto com a divulgação do Censo Escolar
+    modulo: observatorio.coleta.sinopse
+    observacoes: >
+      Usada para docentes por escolaridade (E1, E3) e para conferir totais de matrícula dos
+      microdados. Conta docente único por município, diferente da soma por escola.
+
+  - id: inep_rendimento
+    nome: Indicadores Educacionais - Taxas de Rendimento Escolar
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/taxas-de-rendimento-escolar
+    padrao_url: https://download.inep.gov.br/informacoes_estatisticas/indicadores_educacionais/{ano}/tx_rend_municipios_{ano}.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS (cabeçalho em várias linhas, vírgula decimal, marcador "--")
+    periodicidade: anual
+    anos_disponiveis: "2007-2025"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: cerca de 1 ano (as taxas de um ano dependem da situação final do aluno)
+    modulo: observatorio.coleta.inep_indicadores
+    observacoes: >
+      Página com uma aba por ano (sub-página /<ano>). Nomes de arquivo mudam entre anos
+      (tx_rendimento_municipios_2015.zip, TAXA_REND_2016_MUNICIPIOS.zip, TX_REND_MUNICIPIOS_2018.zip ...).
+      A aba de 2021 aparece como "2021." na página.
+
+  - id: inep_distorcao
+    nome: Indicadores Educacionais - Taxas de Distorção Idade-série
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/taxas-de-distorcao-idade-serie
+    padrao_url: https://download.inep.gov.br/informacoes_estatisticas/indicadores_educacionais/{ano}/TDI_{ano}_MUNICIPIOS.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS
+    periodicidade: anual
+    anos_disponiveis: "2006-2025"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: publicado junto com o Censo Escolar
+    modulo: observatorio.coleta.inep_indicadores
+
+  - id: inep_afd
+    nome: Indicadores Educacionais - Adequação da Formação Docente (AFD)
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/adequacao-da-formacao-docente
+    padrao_url: https://download.inep.gov.br/informacoes_estatisticas/indicadores_educacionais/{ano}/AFD_{ano}_MUNICIPIOS.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS
+    periodicidade: anual
+    anos_disponiveis: "2013-2025"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: publicado junto com o Censo Escolar
+    modulo: observatorio.coleta.inep_indicadores
+
+  - id: inep_atu
+    nome: Indicadores Educacionais - Média de Alunos por Turma (ATU)
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/media-de-alunos-por-turma
+    padrao_url: https://download.inep.gov.br/informacoes_estatisticas/indicadores_educacionais/{ano}/ATU_{ano}_MUNICIPIOS.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS
+    periodicidade: anual
+    anos_disponiveis: "2007-2025"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: publicado junto com o Censo Escolar
+    modulo: observatorio.coleta.inep_indicadores
+
+  - id: inep_dsu
+    nome: Indicadores Educacionais - Percentual de Docentes com Curso Superior (DSU)
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/percentual-de-docentes-com-curso-superior
+    padrao_url: https://download.inep.gov.br/informacoes_estatisticas/indicadores_educacionais/{ano}/DSU_{ano}_MUNICIPIOS.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS
+    periodicidade: anual
+    anos_disponiveis: "2011-2025"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: publicado junto com o Censo Escolar
+    modulo: observatorio.coleta.inep_indicadores
+
+  - id: ideb
+    nome: Índice de Desenvolvimento da Educação Básica (Ideb) - Resultados
+    orgao: INEP
+    prioridade: P1
+    pagina_oficial: https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb/resultados
+    padrao_url: https://download.inep.gov.br/ideb/resultados/divulgacao_anos_iniciais_municipios_{ano}.zip
+    tipo_acesso: download
+    formato: ZIP com XLSX e ODS, formato largo (anos em colunas)
+    periodicidade: bienal (anos ímpares)
+    anos_disponiveis: "2005-2025 (a edição mais recente traz a série inteira)"
+    licenca: Dados abertos; citar a fonte INEP
+    latencia_tipica: agosto/setembro do ano seguinte ao Saeb
+    modulo: observatorio.coleta.ideb
+    observacoes: >
+      Cada edição baixada é guardada: o INEP revisa valores já publicados. Arquivos por Brasil,
+      regiões e UFs, municípios e escolas; anos iniciais, anos finais e ensino médio.
+
+  - id: populacao_datasus
+    nome: Estimativas populacionais por município, sexo e idade (RIPSA/Ministério da Saúde)
+    orgao: Ministério da Saúde / DATASUS
+    prioridade: P1
+    pagina_oficial: http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/cnv/popsvs2024br.def
+    padrao_url: ftp://ftp.datasus.gov.br/dissemin/publicos/IBGE/POPSVS/POPSBR{aa}.zip
+    tipo_acesso: download
+    formato: ZIP com DBF (FTP); alternativa pelo TabNet (tabela em texto separada por ';')
+    periodicidade: anual
+    anos_disponiveis: "2000-2025 (TabNet); arquivos DBF no FTP de 2013 em diante"
+    licenca: Dados abertos; citar Ministério da Saúde/RIPSA
+    latencia_tipica: revisões eventuais de toda a série (nota técnica RIPSA 01/2025)
+    modulo: observatorio.coleta.populacao_datasus
+    observacoes: >
+      Denominador das taxas de atendimento (A1 a A4). O FTP não pôde ser verificado de dentro do
+      ambiente de desenvolvimento; o coletor lista o diretório antes de baixar e, se o FTP falhar,
+      usa o TabNet (verificado em 29/09/2026). Cada valor guarda a fonte e a edição usadas.
+
+  - id: sidra_ibge
+    nome: IBGE SIDRA - estimativas de população, Censo 2022 e PIB municipal
+    orgao: IBGE
+    prioridade: P1
+    pagina_oficial: https://apisidra.ibge.gov.br
+    padrao_url: https://apisidra.ibge.gov.br/values/t/{tabela}/n6/{municipio}/v/{variavel}/p/all
+    tipo_acesso: api
+    formato: JSON
+    periodicidade: anual (estimativas, PIB) e decenal (Censo)
+    anos_disponiveis: "6579: 2001-2026; 9514: 2022; 5938: 2002-2023; 9542: 2022"
+    licenca: Dados abertos; citar IBGE
+    latencia_tipica: PIB municipal com cerca de 2 anos de defasagem
+    modulo: observatorio.coleta.sidra
+    observacoes: >
+      Tabelas usadas: 6579 (população residente estimada), 9514 (Censo 2022 por sexo e idade),
+      5938 (PIB a preços correntes, variável 37) e 9542 (Censo 2022, pessoas de 15 anos ou mais
+      e alfabetizadas, usada em G2).
+
+  - id: siope
+    nome: SIOPE - Sistema de Informações sobre Orçamentos Públicos em Educação (dados abertos)
+    orgao: FNDE
+    prioridade: P1
+    pagina_oficial: https://www.fnde.gov.br/olinda-ide/servico/DADOS_ABERTOS_SIOPE/versao/v1/odata/$metadata
+    padrao_url: https://www.fnde.gov.br/olinda-ide/servico/DADOS_ABERTOS_SIOPE/versao/v1/odata/{recurso}(Ano_Consulta=@Ano_Consulta,Num_Peri=@Num_Peri,Sig_UF=@Sig_UF)
+    tipo_acesso: api
+    formato: JSON (OData)
+    periodicidade: anual (6º bimestre)
+    anos_disponiveis: "2017 em diante pelo serviço OData (2015 e 2016 retornam vazio)"
+    licenca: Dados abertos; citar FNDE
+    latencia_tipica: declaração até o fim do 1º trimestre do ano seguinte
+    modulo: observatorio.coleta.siope
+    observacoes: >
+      COD_MUNI tem 6 dígitos (sem o dígito verificador). O recurso Remuneracao_Siope traz nome
+      de profissional (dado pessoal) e NÃO é coletado.
+
+  - id: siconfi
+    nome: SICONFI - Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro
+    orgao: Tesouro Nacional
+    prioridade: P1
+    pagina_oficial: https://apidatalake.tesouro.gov.br/docs/siconfi/
+    padrao_url: https://apidatalake.tesouro.gov.br/ords/siconfi/tt/{endpoint}
+    tipo_acesso: api
+    formato: "JSON (ORDS, paginado: items, hasMore, limit=5000, offset)"
+    periodicidade: anual (DCA) e bimestral (RREO)
+    anos_disponiveis: "2015 em diante"
+    licenca: Dados abertos; citar Tesouro Nacional
+    latencia_tipica: DCA até 30 de abril do ano seguinte
+    modulo: observatorio.coleta.siconfi
+    observacoes: >
+      O RREO Anexo 08 (MDE) não consta no SICONFI para Juazeiro nem Petrolina (verificado 2016,
+      2019, 2023, 2024): a conferência de F1 é feita com a DCA Anexo I-E (despesa por função
+      12 - Educação), que bate com a despesa liquidada declarada no SIOPE.
+
+  - id: ica
+    nome: Indicador Criança Alfabetizada (ICA)
+    orgao: INEP
+    prioridade: P2
+    pagina_oficial: https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/avaliacao-da-alfabetizacao
+    padrao_url: ""
+    tipo_acesso: download
+    formato: XLSX
+    periodicidade: anual (2023 em diante)
+    anos_disponiveis: "2023-"
+    licenca: Dados abertos; citar INEP
+    latencia_tipica: ""
+    modulo: observatorio.coleta.ica
+
+  - id: sidra_alfabetizacao
+    nome: IBGE SIDRA - Censo 2022, alfabetização de 15 anos ou mais (tabela 9542)
+    orgao: IBGE
+    prioridade: P2
+    pagina_oficial: https://apisidra.ibge.gov.br
+    padrao_url: https://apisidra.ibge.gov.br/values/t/9542/n6/{municipio}/v/950/p/all
+    tipo_acesso: api
+    formato: JSON
+    periodicidade: decenal
+    anos_disponiveis: "2022"
+    licenca: Dados abertos; citar IBGE
+    latencia_tipica: ""
+    modulo: observatorio.coleta.sidra
+
+  - id: saeb
+    nome: Saeb - resultados e microdados
+    orgao: INEP
+    prioridade: P2
+    pagina_oficial: https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/saeb/resultados
+    padrao_url: ""
+    tipo_acesso: download
+    formato: ""
+    periodicidade: bienal
+    anos_disponiveis: ""
+    licenca: Dados abertos; citar INEP
+    latencia_tipica: ""
+    modulo: ""
+    observacoes: Pendente (ver docs/pendencias.md). As notas médias do Saeb já entram pelas planilhas do Ideb (C2).
+
+  - id: censo_superior
+    nome: Microdados do Censo da Educação Superior
+    orgao: INEP
+    prioridade: P2
+    pagina_oficial: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior
+    padrao_url: ""
+    tipo_acesso: download
+    formato: ""
+    periodicidade: anual
+    anos_disponiveis: ""
+    licenca: Dados abertos; citar INEP
+    latencia_tipica: ""
+    modulo: ""
+    observacoes: Pendente (ver docs/pendencias.md).
+
+  - id: capes
+    nome: CAPES - Dados Abertos (pós-graduação)
+    orgao: CAPES
+    prioridade: P2
+    pagina_oficial: https://dadosabertos.capes.gov.br
+    padrao_url: ""
+    tipo_acesso: api
+    formato: ""
+    periodicidade: anual
+    anos_disponiveis: ""
+    licenca: Dados abertos; citar CAPES
+    latencia_tipica: ""
+    modulo: ""
+    observacoes: Pendente (ver docs/pendencias.md).
+
+  - id: calculo_observatorio
+    nome: Cálculo próprio do Observatório
+    orgao: Observatório da Educação de Juazeiro-BA
+    prioridade: P1
+    pagina_oficial: ""
+    padrao_url: ""
+    tipo_acesso: derivado
+    formato: ""
+    periodicidade: acompanha as fontes de origem
+    anos_disponiveis: ""
+    licenca: ""
+    latencia_tipica: ""
+    modulo: observatorio.indicadores
+    observacoes: >
+      Fonte atribuída a indicadores calculados pelo Observatório a partir de outras fontes
+      (ex.: taxa de atendimento, investimento por aluno). A fórmula fica em core.dim_indicador.
+
+  - id: manual_seduc
+    nome: Coleta manual / dados internos da SEDUC (etapa futura)
+    orgao: SEDUC Juazeiro
+    prioridade: P3
+    pagina_oficial: ""
+    padrao_url: ""
+    tipo_acesso: manual
+    formato: planilha padronizada
+    periodicidade: variável
+    anos_disponiveis: ""
+    licenca: uso interno
+    latencia_tipica: ""
+    modulo: ""
+    observacoes: Reservada para B3, B4, C5, E4, E6 e F5 (sem dados nesta etapa).

@@ -1,0 +1,47 @@
+# Regras de ausência por fonte (carregadas em etl.regra_ausencia).
+# Cada marcador encontrado numa célula vira um status explícito. NENHUM marcador vira zero.
+# status possíveis: sem_dado | nao_se_aplica | observado (só com "valor", para convenções em que o
+#   marcador significa um número, como o "-" do IBGE, que é zero absoluto por definição do próprio IBGE)
+#
+# Observações:
+# - Célula vazia é sempre "sem_dado" (regra "vazio" abaixo).
+# - "--" nas planilhas de Indicadores Educacionais do INEP aparece onde o recorte não tem a etapa
+#   (ex.: rede municipal no ensino médio, 4ª série onde não há curso de 4 anos). Por isso é tratado
+#   como "nao_se_aplica". Se uma nota técnica do INEP indicar outro significado, altere aqui:
+#   a mudança vale na próxima execução (não é preciso mexer no código).
+
+padrao:
+  vazio: {status: sem_dado, descricao: Célula vazia na origem}
+
+fontes:
+  inep_rendimento: &inep_indicadores
+    "--": {status: nao_se_aplica, descricao: "INEP: recorte sem matrícula na etapa (não há o que medir)"}
+    "-": {status: sem_dado, descricao: "INEP: dado não disponível"}
+    "*": {status: sem_dado, descricao: "INEP: dado suprimido"}
+    "ND": {status: sem_dado, descricao: "INEP: não divulgado"}
+    "...": {status: sem_dado, descricao: "INEP: dado não disponível"}
+    "x": {status: sem_dado, descricao: "INEP: dado omitido"}
+  inep_distorcao: *inep_indicadores
+  inep_afd: *inep_indicadores
+  inep_atu: *inep_indicadores
+  inep_dsu: *inep_indicadores
+  sinopse_estatistica: *inep_indicadores
+  ideb:
+    "-": {status: sem_dado, descricao: "Ideb: sem valor (rede/escola sem resultado no ano ou sem meta)"}
+    "--": {status: sem_dado, descricao: "Ideb: sem valor"}
+    "ND": {status: sem_dado, descricao: "Ideb: não divulgado (ex.: participação insuficiente no Saeb ou 2021)"}
+    "*": {status: sem_dado, descricao: "Ideb: dado suprimido"}
+  sidra_ibge:
+    "-": {status: observado, valor: 0, descricao: "IBGE: zero absoluto (não resultante de arredondamento). É zero de verdade, não lacuna."}
+    "..": {status: nao_se_aplica, descricao: "IBGE: não se aplica dado numérico"}
+    "...": {status: sem_dado, descricao: "IBGE: dado numérico não disponível"}
+    "X": {status: sem_dado, descricao: "IBGE: dado numérico omitido (sigilo)"}
+  sidra_alfabetizacao:
+    "-": {status: observado, valor: 0, descricao: "IBGE: zero absoluto (não resultante de arredondamento). É zero de verdade, não lacuna."}
+    "..": {status: nao_se_aplica, descricao: "IBGE: não se aplica dado numérico"}
+    "...": {status: sem_dado, descricao: "IBGE: dado numérico não disponível"}
+    "X": {status: sem_dado, descricao: "IBGE: dado numérico omitido (sigilo)"}
+  censo_escolar: {}
+  populacao_datasus: {}
+  siope: {}
+  siconfi: {}
